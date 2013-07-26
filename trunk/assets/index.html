@@ -9,7 +9,7 @@
             #canvas1{
 				border: solid 1px brown;
 				cursor: crosshair;
-				display:block;
+				
 			}
             #colors{margin:0;padding:0;}
             #colors li{ height: 20px; width: 20px; display: block; cursor: pointer; }
@@ -20,12 +20,15 @@
     </head>
 
     <body>
-
+		<div>
             <canvas id="canvas1" width="240" height="200"></canvas>
+        </div>
+        <div>
             <br style="clear:both;"/>
-    <button id="undo" href="#" disabled="disabled">Undo</button>
-    <button id="clear" href="#" style="background-color:red;">Reset</button> 
-    <button id="export" href="#">Export as Image</button> 
-
+        <button id="undo" href="#" disabled="disabled">Undo</button>
+        <button id="clear" href="#">Reset</button> 
+        <button id="export" href="#">Export as Image</button> 
+        </div>
+    
 </body>
 </html>

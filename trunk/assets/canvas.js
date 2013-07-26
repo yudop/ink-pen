@@ -29,6 +29,7 @@ function canvasInit(){
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight - 60;
 	var context = canvas.getContext("2d");
+	context.lineWidth = 5;
 	context.lineCap = "round";
 	//Fill it with white background
 	context.save();
@@ -62,11 +63,11 @@ function moveObjT(e) {
 
 function getEvent(e) {
     if (e.touches && e.touches.length) {
-		for (var i = 0; i < e.touches.length; i++)
-		{
-			var logLine = e.touches[i].identifier + ' ' + e.touches[i].pageX + ' ' + e.touches[i].pageY;
-			console.log(logLine);
-		}
+		// for (var i = 0; i < e.touches.length; i++)
+		// {
+			// var logLine = e.touches[i].identifier + ' ' + e.touches[i].pageX + ' ' + e.touches[i].pageY + ' ' + e.touches[i].force;
+			// console.log(logLine);
+		// }
         return e.touches[0];
     } else if (e.changedTouches && e.changedTouches.length) {
         return e.changedTouches[0];
@@ -75,16 +76,20 @@ function getEvent(e) {
 }
 
 function beginMovingObj(e){
-	// if(e.button == 0) oh i'm so stupid
+	// if(e.button == 0)
 	{
 		draw = 1;
+		timeInMs = Date.now();
+		deltaTime = 0;
+		oldTime = timeInMs;
+
 		//Start The drawing flow
 		//Save the state
 		// saveActions();
 		cntxt.beginPath();
 		cntxt.moveTo(e.pageX-left, e.pageY-cvTop);
 		// console.log(e.pageX-left, '__', e.pageY-cvTop);
-		var logLine = "start" + (e.pageX-left) + "  " + (e.pageY-cvTop);
+		var logLine = "start " + (e.pageX-left) + "  " + (e.pageY-cvTop);
 		console.log(logLine);
 	}
 	// else{
@@ -103,21 +108,27 @@ function stopMovingObj(e){
 		cntxt.lineTo(e.pageX-left+1, e.pageY-cvTop+1);
 		cntxt.stroke();
 		cntxt.closePath();
-		var logLine = "end" + (e.pageX-left) + "  " + (e.pageY-cvTop);
+		var logLine = "end " + (e.pageX-left) + "  " + (e.pageY-cvTop);
 		console.log(logLine);
 	}
 }
 
 function moveObj(e){
 	if(draw == 1){
+		timeInMs = Date.now();
+		deltaTime = timeInMs - oldTime;
+		oldTime = timeInMs;
+		console.log(Math.round(deltaTime / 20));
+		cntxt.lineWidth = Math.min(7, Math.round(deltaTime / 20));
 		cntxt.lineTo(e.pageX-left+1, e.pageY-cvTop+1);
 		cntxt.stroke();
-		var logLine = "move" + (e.pageX-left) + "  " + (e.pageY-cvTop);
-		console.log(logLine);
+		// var logLine = "move " + (e.pageX-left) + "  " + (e.pageY-cvTop)  + "  " + (e.force);
+		// console.log(logLine);
 	}
 }
 
 var canvas, cntxt, cvTop, left, draw, draw = 0;
+var timeInMs, oldTime, deltaTime;
 
 $(function(){
 	//Get the canvas element
@@ -128,38 +139,6 @@ $(function(){
 	left = $('#canvas1').offset().left;
 	console.log(cvTop);
 	canvasInit();
-
-	// //Drawing Code
-	// $('#canvas1').mousedown(function(e){
-		// if(e.button == 0){
-			// draw = 1;
-			// //Start The drawing flow
-			// //Save the state
-			// saveActions();
-			// cntxt.beginPath();
-			// cntxt.moveTo(e.pageX-left, e.pageY-cvTop);
-		// }
-		// else{
-			// draw = 0;
-		// }
-	// })
-	// .mouseup(function(e){
-		// if(e.button != 0){
-			// draw = 1;
-		// }
-		// else{
-			// draw = 0;
-			// cntxt.lineTo(e.pageX-left+1, e.pageY-cvTop+1);
-			// cntxt.stroke();
-			// cntxt.closePath();
-		// }
-	// })
-	// .mousemove(function(e){
-		// if(draw == 1){
-			// cntxt.lineTo(e.pageX-left+1, e.pageY-cvTop+1);
-			// cntxt.stroke();
-		// }
-	// });
 
 	//Extra Links Code
 	$('#export').click(function(e){
